@@ -4,6 +4,8 @@
 		echo Session::flash('home');
 	}
 
+	### Testing
+
 
 	$user = new User();
 	if ($user->isLoggedIn()) {
