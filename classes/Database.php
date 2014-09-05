@@ -70,12 +70,17 @@
 			return $this->action('DELETE', $table, $where);
 		}
 
-		public function insert($table, $fields = array()) {
+		public function insert($table, $fields = array(), $auto_fields = 1) {
 			if (count($fields)) {
 				$keys 	= array_keys($fields);
 				$values = null;
 				$x 		= 1;
-
+				
+				if($auto_fields) {
+					array_push($fields,$table.'_last_user',$table.'_insert');
+					array_push($values,$user,NOW());
+				}
+				
 				foreach ($fields as $field) {
 					$values .= '?';
 					if ($x<count($fields)) {
@@ -93,9 +98,14 @@
 			return false;
 		}
 
-		public function update($table, $id, $fields = array()) {
+		public function update($table, $id, $fields = array(), $auto_fields = 1) {
 			$set 	= '';
 			$x		= 1;
+			
+			if($auto_fields) {
+				array_push($fields,$table.'_last_user');
+				array_push($values,$user);
+			}
 
 			foreach ($fields as $name => $value) {
 				$set .= "{$name} = ?";
